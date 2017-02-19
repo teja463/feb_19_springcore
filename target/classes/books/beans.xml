@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="javabooks" class="books.JavaBooks" /> 
+	<bean id="oraclebooks" class="books.OracleBooks"/>
+	 
+	<bean id="catalog" class="books.Catalog" init-method="startup">
+	     <property name="books" ref="oraclebooks"></property>
+	</bean>
+ 
+
+	<bean id="cdiCatalog" class="books.CDICatalog"  lazy-init="true">
+		 <constructor-arg name="books" ref="oraclebooks"></constructor-arg>
+	</bean>
+ 
+</beans>
