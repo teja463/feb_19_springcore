@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+
+	<bean id="tracebean" class="aop_xml.TraceAspect" />
+	<bean id="hello" class="aop_xml.Hello" />
+
+
+	<aop:config>
+		<aop:pointcut id="allMethods" expression="execution(* *.* (..))" />
+
+		<aop:aspect id="traceaspect" ref="tracebean">
+
+			<aop:pointcut id="printMethods" expression="execution(* *.print* (..))" />
+			<aop:pointcut id="processMethods" expression="execution(* *.process* (..))" />
+
+<!-- 
+			<aop:before pointcut-ref="allMethods" method="beforeMethod" />
+			<aop:after pointcut-ref="allMethods" method="afterMethod" />
+			<aop:after-returning pointcut-ref="processMethods"
+				method="afterSuccess" />
+			<aop:after-throwing pointcut-ref="processMethods"
+				method="afterFailure" />
+	 -->			
+				
+
+			<!-- <aop:after-throwing pointcut-ref="processMethod" method="afterThrowing" 
+				throwing="ex" /> -->
+				
+			<aop:around pointcut-ref="printMethods" method="aroundAdvice" />
+
+		</aop:aspect>
+
+	</aop:config>
+
+
+
+</beans>
