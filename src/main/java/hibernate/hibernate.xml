@@ -1,0 +1,36 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+           
+   <bean id="oracledatasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+       <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+       <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+       <property name="username" value="hr" />
+       <property name="password" value="hr" />
+   </bean>
+
+   <bean id="mySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <property name="dataSource" ref="oracledatasource"/>
+    <property name="mappingResources">
+      <list>
+        <value>hibernate/job.hbm.xml</value>
+      </list>
+    </property>
+    <property name="hibernateProperties">
+      <value>
+        hibernate.dialect=org.hibernate.dialect.OracleDialect
+      </value>
+    </property>
+  </bean>
+  
+  <bean id="listJobs" class="hibernate.ListJobs">
+    <property name="sessionFactory" ref="mySessionFactory"/>
+  </bean>
+  
+  <bean id="addJob" class="hibernate.AddJob">
+    <property name="sessionFactory" ref="mySessionFactory"/>
+  </bean>
+
+
+</beans>

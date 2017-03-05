@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<bean id="oracledatasource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="hr" />
+		<property name="password" value="hr" />
+	</bean>
+
+	<bean id="updateSalary" class="jdbc.UpdateSalary">
+		<constructor-arg name="dataSource" ref="oracledatasource" />
+	</bean>
+
+	<bean id="updateSalary2" class="jdbc.UpdateSalary2">
+		<property name="dataSource" ref="oracledatasource" />
+	</bean>
+
+	<bean id="listJobTitles" class="jdbc.ListJobTitles">
+		<property name="dataSource" ref="oracledatasource" />
+	</bean>
+
+	<bean id="listAllJobs" class="jdbc.ListAllJobs">
+		<property name="dataSource" ref="oracledatasource" />
+	</bean>
+
+	<bean id="addJob" class="jdbc.AddJob">
+		<property name="dataSource" ref="oracledatasource" />
+	</bean>
+
+	<bean id="testTrans" class="jdbc.TestTransaction">
+		<property name="dataSource" ref="oracledatasource" />
+	</bean>
+
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="oracledatasource" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="hikeSalaries" propagation="REQUIRES_NEW" />
+			<tx:method name="udateSalary" propagation="REQUIRES_NEW" />
+			<tx:method name="listTitles" propagation="NOT_SUPPORTED" />
+			<tx:method name="listJobs" propagation="NOT_SUPPORTED" />
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+
+
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="jdbcOperations" expression="execution (* jdbc.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="jdbcOperations" />
+	</aop:config>
+
+
+
+</beans>

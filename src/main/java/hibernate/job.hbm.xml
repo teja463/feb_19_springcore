@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="hibernate.Job" table="JOBS">
+    <id name="id" column="job_id"  >
+      <generator class="assigned"/>
+    </id>
+    <property name="title" column="job_title"/> 
+    <property name="min" column="min_salary"/>
+    <property name="max" column="max_salary"/>
+  </class>
+</hibernate-mapping>
